@@ -67,7 +67,6 @@ resource "aws_route_table_association" "public_association" {
 
 # Allocate an Elastic IP for the NAT Gateway
 resource "aws_eip" "nat" {
-  domain = "vpc"
   tags = {
     Name = "ai-video-lab-nat-eip"
   }
