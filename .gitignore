@@ -3,6 +3,10 @@
 *.tfstate.backup
 .terraform/
 
+# tfvars files (sensitive environment-specific data)
+terraform.tfvars
+terraform.tfvars.json
+
 # IDE settings
 .vscode/
 
