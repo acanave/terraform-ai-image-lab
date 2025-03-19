@@ -102,3 +102,28 @@ resource "aws_route_table_association" "private_association" {
   subnet_id      = aws_subnet.private.id
   route_table_id = aws_route_table.private.id
 }
+
+resource "aws_security_group" "ec2_sg" {
+  name        = "ai-video-lab-ec2-sg"
+  description = "Security group for AI Video Lab EC2 instance"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = [var.allowed_ssh_cidr]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "ai-video-lab-ec2-sg"
+  }
+}
+
