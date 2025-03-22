@@ -1,20 +1,27 @@
 variable "aws_region" {
-  description = "The AWS region to deploy resources"
+  description = "AWS region for all resources"
   type        = string
   default     = "us-east-1"
 }
 
-variable "allowed_ssh_cidr" {
-  description = "CIDR block allowed for SSH access (e.g., your public IP with /32)"
+variable "ami" {
+  description = "GPU‑enabled AMI ID for EC2 instance"
   type        = string
-  # Optionally, you can provide a default value here,
-  # but it’s common to leave it empty and supply it via terraform.tfvars or command line.
-  # For example:
-  # default = "203.0.113.45/32"
+}
+
+variable "instance_type" {
+  description = "EC2 instance type for compute"
+  type        = string
+  default     = "g4dn.xlarge"
+}
+
+variable "allowed_ssh_cidr" {
+  description = "CIDR block allowed for SSH access (e.g., your public IP/32)"
+  type        = string
 }
 
 variable "s3_bucket_name" {
-  description = "The globally unique name for the S3 bucket"
+  description = "Globally unique S3 bucket name"
   type        = string
   default     = "your-unique-ai-video-bucket"
 }

@@ -1,14 +1,5 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 4.0"
-    }
-  }
-}
-
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 module "vpc" {
@@ -21,10 +12,18 @@ module "vpc" {
 }
 
 module "s3" {
-  source = "./modules/s3"
-  
-  bucket_name             = "your-unique-ai-video-bucket"  # Ensure this bucket name is globally unique.
-  region                  = "us-east-1"
-  vpc_id                  = module.vpc.vpc_id
+  source                 = "./modules/s3"
+  bucket_name            = var.s3_bucket_name
+  region                 = var.aws_region
+  vpc_id                 = module.vpc.vpc_id
   private_route_table_ids = module.vpc.private_route_table_ids
+}
+
+module "compute" {
+  source               = "./modules/compute"
+  ami                  = var.ami
+  instance_type        = var.instance_type
+  private_subnet_id    = module.vpc.private_subnet_id
+  iam_instance_profile = module.iam.ec2_role_name
+  security_group_ids   = [module.vpc.ec2_sg.id]
 }
