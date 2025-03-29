@@ -5,7 +5,7 @@ variable "instance_type" {
 }
 
 variable "ami" {
-  description = "The AMI ID to use for the instance (must be GPU-enabled)"
+  description = "ami-0349dc82277d50797"
   type        = string
   # Optionally, you can leave this without a default and supply it externally.
 }

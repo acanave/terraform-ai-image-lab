@@ -18,7 +18,3 @@ variable "availability_zone" {
   default     = "us-east-1a"
 }
 
-variable "allowed_ssh_cidr" {
-  description = "CIDR block allowed for SSH access (e.g., YOUR_IP/32)"
-  type        = string
-}
