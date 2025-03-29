@@ -1,88 +1,118 @@
 # AI Video Lab
 
-This project is a proof-of-concept for an AI video generator deployed on AWS using Terraform. The goal is to create a simple, low-cost infrastructure that runs an AI video generator on a GPU-enabled EC2 instance in a private VPC, and automatically uploads the generated video to an S3 bucket.
+This project is a proof-of-concept for an AI video generator deployed on AWS using Terraform. The goal is to create a simple, low-cost infrastructure that runs an AI video generator on a GPU-enabled EC2 instance in a private VPC, and automatically uploads the generated media to an S3 bucket.
+
+---
+
+## ✅ Current Progress
+
+- [x] Terraform infrastructure complete: VPC, public/private subnets, route tables, internet gateway, NAT gateway
+- [x] IAM roles and S3 bucket configured
+- [x] EC2 instance successfully provisioned (t3.large for testing)
+- [x] Mock image output tested and uploaded to S3
+- [x] Shell script created to launch Stable Diffusion (Automatic1111) in Docker
+- [ ] Awaiting GPU (g4dn.xlarge) on-demand quota approval from AWS
+
+---
 
 ## Overview
 
 The project consists of two main parts:
 
-1. **Infrastructure Setup** – Provision AWS resources (VPC, EC2, S3, etc.) using Terraform.
-2. **AI Video Generation Application** – A Dockerized AI video generator that runs on the EC2 instance and uploads its output to S3.
+1. **Infrastructure Setup** – Provision AWS resources (VPC, EC2, S3, IAM) using Terraform.
+2. **AI Image/Video Generation Application** – A Dockerized AI model (Stable Diffusion via Automatic1111) running on the EC2 instance and uploading its output to S3.
 
-This README provides an overview of the project structure and steps to get started.
+---
 
 ## Directory Structure
 
-Below is the Terraform directory structure used to provision the AWS infrastructure:
-
-AWS Project/
+```bash
+AWS-Project/
 └── terraform/
     ├── main.tf
     ├── variables.tf
+    ├── terraform.tfvars
     ├── outputs.tf
     └── modules/
         ├── vpc/
         ├── s3/
-        └── iam/
+        ├── iam/
+        └── compute/
+run_sd_webui.sh     # Shell script to launch Stable Diffusion WebUI
+```
 
+---
 
 ## Getting Started
 
 ### Local Environment Setup
 
 1. **Install and Configure AWS CLI:**
-   - Install the AWS CLI (version 2) on your Mac.
-   - Run `aws configure` and enter your AWS Access Key, Secret Access Key, default region (`us-east-1`), and output format (e.g., `json`).
+   - Run `aws configure` to set your credentials and region (e.g., `us-east-1`).
 
 2. **Set Up Visual Studio Code:**
-   - Ensure Visual Studio Code is installed.
-   - Install the Terraform extension for syntax highlighting and linting.
+   - Install Terraform extension for syntax highlighting and linting.
 
 3. **Initialize Git Repository:**
-   - Create a new Git repository in your project folder and push the initial commit to GitHub.
+   - Run `git init` and push to GitHub for version control.
+
+---
 
 ### Terraform Setup
 
 1. **Navigate to the Terraform Directory:**
-   - Open the `terraform/` folder in Visual Studio Code.
+   ```bash
+   cd terraform/
+   ```
 
 2. **Update Variables:**
-   - Edit `variables.tf` with your project-specific values (e.g., instance type, VPC CIDR block).
+   - Ensure `terraform.tfvars` includes values for `instance_type`, `ami`, and `bucket_name`.
 
-3. **Initialize and Deploy Infrastructure:**
-   - Run `terraform init` to initialize the Terraform project.
-   - Run `terraform plan` to review the planned changes.
-   - Run `terraform apply` to provision the AWS resources.
+3. **Provision Infrastructure:**
+   ```bash
+   terraform init
+   terraform plan
+   terraform apply
+   ```
 
-### AI Video Generation Application
+---
 
-- **Application Overview:**
-  - The AI video generator is packaged as a Docker container and runs on a GPU-enabled EC2 instance.
-  - Once the video is generated, it is uploaded to an S3 bucket using a user data script.
-  
+## AI Application: Stable Diffusion (Automatic1111)
+
+- **Containerized Launch:**
+  - A shell script (`run_sd_webui.sh`) is ready to launch the container once GPU quota is approved.
+
+- **S3 Output:**
+  - Simulated and real outputs can be saved to `/outputs` and uploaded to your defined S3 bucket.
+
 - **Security:**
-  - The EC2 instance is deployed in a private subnet within a VPC.
-  - An S3 VPC endpoint ensures that traffic between the EC2 instance and S3 does not traverse the public internet.
-  
+  - EC2 runs in a private subnet with SSM access.
+  - S3 VPC endpoint is used for secure, internal data transfers.
+
+---
+
+## Next Steps
+
+- ✅ Validate real Stable Diffusion Docker container runs successfully after GPU upgrade
+- ✅ Connect volume mount for persistent output
+- 🔄 Automate S3 uploads after generation
+- 🚀 Optional: open WebUI via port or tunneling for remote testing
+
+---
+
 ## Future Enhancements
 
-- **Scalability:**  
-  Expand the setup by adding an ECS cluster with Auto Scaling for handling increased workloads.
+- **Auto-scaling EC2 or ECS**
+- **Trigger via Lambda/API Gateway**
+- **Monitoring with CloudWatch**
+- **CI/CD pipeline for Terraform and image generation logic**
 
-- **Content Distribution:**  
-  Integrate CloudFront to globally distribute your videos.
-
-- **CI/CD Integration:**  
-  Set up automated testing and deployment pipelines using GitHub Actions or AWS CodePipeline.
-
-- **Enhanced Monitoring:**  
-  Implement CloudWatch for in-depth monitoring and alerting.
+---
 
 ## Contributing
 
-Feel free to fork this repository, make improvements, and submit pull requests. Your feedback and suggestions are welcome!
+Fork, improve, and share feedback via pull requests. Community ideas and improvements welcome!
 
 ## License
 
-This project is licensed under the MIT License.
-
+MIT License
