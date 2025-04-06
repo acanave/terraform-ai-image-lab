@@ -24,16 +24,7 @@ resource "aws_instance" "text_to_image_instance" {
               cd /home/ec2-user/stable-diffusion-webui
               ./webui.sh --listen
               EOF
-
-  instance_market_options {
-    market_type = "spot"
-
-    spot_options {
-      spot_instance_type             = "one-time"
-      instance_interruption_behavior = "terminate"
-    }
-  }
-
+              
   tags = {
     Name = "ai-video-lab-text-to-image-instance"
   }
