@@ -24,3 +24,9 @@ variable "security_group_ids" {
   description = "A list of security group IDs to attach to the EC2 instance"
   type        = list(string)
 }
+
+variable "default_user" {
+  description = "Default OS user for the instance (e.g., 'ubuntu' or 'ssm-user')"
+  type        = string
+  default     = "ubuntu"
+}

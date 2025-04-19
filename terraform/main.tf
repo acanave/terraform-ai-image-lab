@@ -1,5 +1,10 @@
-provider "aws" {
-  region = var.aws_region
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 4.0"
+    }
+  }
 }
 
 module "vpc" {
@@ -26,6 +31,7 @@ module "compute" {
   private_subnet_id    = module.vpc.private_subnet_id
   iam_instance_profile = module.iam.instance_profile_name
   security_group_ids   = [module.vpc.ec2_sg_id]
+  default_user         = var.default_user
 }
 module "iam" {
   source     = "./modules/iam"
