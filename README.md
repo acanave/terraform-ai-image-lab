@@ -1,117 +1,116 @@
-# AI Video Lab
 
-This project is a proof-of-concept for an AI video generator deployed on AWS using Terraform. The goal is to create a simple, low-cost infrastructure that runs an AI video generator on a GPU-enabled EC2 instance in a private VPC, and automatically uploads the generated media to an S3 bucket.
+# AI Video Lab – Personal Infrastructure Showcase
 
----
-
-## ✅ Current Progress
-
-- [x] Terraform infrastructure complete: VPC, public/private subnets, route tables, internet gateway, NAT gateway
-- [x] IAM roles and S3 bucket configured
-- [x] EC2 instance successfully provisioned (t3.large for testing)
-- [x] Mock image output tested and uploaded to S3
-- [x] Shell script created to launch Stable Diffusion (Automatic1111) in Docker
-- [ ] Awaiting GPU (g4dn.xlarge) on-demand quota approval from AWS
+> ✅ This project was designed and built as a personal technical showcase of AWS cloud infrastructure, Terraform automation, and GPU-backed EC2 provisioning for AI use cases.
 
 ---
 
-## Overview
+## 🧠 What This Project Demonstrates
 
-The project consists of two main parts:
+This repo showcases a full-stack, production-style cloud environment that I built and deployed using Terraform. The purpose was to launch a GPU-enabled EC2 instance running an AI image generation model (Stable Diffusion), store outputs securely in S3, and provision all infrastructure using Infrastructure as Code (IaC).
 
-1. **Infrastructure Setup** – Provision AWS resources (VPC, EC2, S3, IAM) using Terraform.
-2. **AI Image/Video Generation Application** – A Dockerized AI model (Stable Diffusion via Automatic1111) running on the EC2 instance and uploading its output to S3.
+This project is not meant as a plug-and-play tool, but as proof of my cloud architecture, security, and automation capabilities.
 
 ---
 
-## Directory Structure
+## 🔧 Technologies & Concepts Demonstrated
+
+- **Terraform (modularized)** for automated AWS provisioning
+- **AWS VPC Design**: public + private subnets, NAT Gateway, route tables
+- **IAM Role Scoping**: EC2 instance role with least-privilege S3 + SSM access
+- **AWS SSO** for secure authentication and access
+- **Private EC2 instance** (g4dn.xlarge) with GPU
+- **SSM Session Manager** used in place of SSH
+- **Stable Diffusion (AUTOMATIC1111)** manual install on EC2
+- **S3 VPC Endpoint** for private uploads
+
+---
+
+## 📂 Repo Structure
 
 ```bash
-AWS-Project/
-└── terraform/
-    ├── main.tf
-    ├── variables.tf
-    ├── terraform.tfvars
-    ├── outputs.tf
-    └── modules/
-        ├── vpc/
-        ├── s3/
-        ├── iam/
-        └── compute/
-run_sd_webui.sh     # Shell script to launch Stable Diffusion WebUI
+terraform/
+├── main.tf
+├── variables.tf
+├── terraform.tfvars
+├── outputs.tf
+└── modules/
+    ├── vpc/
+    ├── iam/
+    ├── s3/
+    └── compute/
+run_sd_webui.sh   # Optional script for Stable Diffusion WebUI launch
 ```
 
 ---
 
-## Getting Started
+## 🛠 Deployment Overview
 
-### Local Environment Setup
-
-1. **Install and Configure AWS CLI:**
-   - Run `aws configure` to set your credentials and region (e.g., `us-east-1`).
-
-2. **Set Up Visual Studio Code:**
-   - Install Terraform extension for syntax highlighting and linting.
-
-3. **Initialize Git Repository:**
-   - Run `git init` and push to GitHub for version control.
-
----
-
-### Terraform Setup
-
-1. **Navigate to the Terraform Directory:**
+1. **SSO Authentication** (used for Terraform CLI access):
    ```bash
-   cd terraform/
+   aws sso login --profile my-sso-profile
+   export AWS_PROFILE=my-sso-profile
    ```
 
-2. **Update Variables:**
-   - Ensure `terraform.tfvars` includes values for `instance_type`, `ami`, and `bucket_name`.
-
-3. **Provision Infrastructure:**
+2. **Provision Infrastructure**:
    ```bash
+   cd terraform/
    terraform init
-   terraform plan
    terraform apply
    ```
 
----
+3. **SSM Into EC2** (no SSH required):
+   ```bash
+   aws ssm start-session --target <instance-id>
+   ```
 
-## AI Application: Stable Diffusion (Automatic1111)
+4. **Install Stable Diffusion (one-time, inside EC2)**:
+   ```bash
+   sudo apt update
+   sudo apt install git python3-venv -y
+   git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
+   cd stable-diffusion-webui
+   python3 -m venv venv
+   source venv/bin/activate
+   ./webui.sh --listen
+   ```
 
-- **Containerized Launch:**
-  - A shell script (`run_sd_webui.sh`) is ready to launch the container once GPU quota is approved.
+5. **Access the WebUI (via port forwarding):**
+   ```bash
+   aws ssm start-session --target <instance-id>      --document-name AWS-StartPortForwardingSession      --parameters '{"portNumber":["7860"], "localPortNumber":["7860"]}'
+   ```
+   Open `http://localhost:7860` in your browser.
 
-- **S3 Output:**
-  - Simulated and real outputs can be saved to `/outputs` and uploaded to your defined S3 bucket.
-
-- **Security:**
-  - EC2 runs in a private subnet with SSM access.
-  - S3 VPC endpoint is used for secure, internal data transfers.
-
----
-
-## Next Steps
-
-- ✅ Validate real Stable Diffusion Docker container runs successfully after GPU upgrade
-- ✅ Connect volume mount for persistent output
-- 🔄 Automate S3 uploads after generation
-- 🚀 Optional: open WebUI via port or tunneling for remote testing
-
----
-
-## Future Enhancements
-
-- **Auto-scaling EC2 or ECS**
-- **Trigger via Lambda/API Gateway**
-- **Monitoring with CloudWatch**
-- **CI/CD pipeline for Terraform and image generation logic**
+6. **Upload Images to S3 (manual or script):**
+   ```bash
+   aws s3 cp output.png s3://your-bucket-name/
+   ```
 
 ---
 
-## Contributing
+## 🔐 Security Best Practices Followed
 
-Fork, improve, and share feedback via pull requests. Community ideas and improvements welcome!
+- No public IPs exposed
+- EC2 lives in a private subnet
+- SSH disabled; only SSM allowed
+- IAM access is scoped and role-based
+- S3 VPC endpoint for secure internal uploads
+
+---
+
+## 🎯 Use Case
+
+This project was built for:
+- Showcasing real AWS architecture skills
+- Practicing secure deployment workflows
+- Demonstrating IaC, SSO, and container runtime setups in a real scenario
+
+---
+
+## 📘 Notes
+
+This is a personal portfolio project. All AWS access keys are excluded.  
+If you'd like to adapt this project, feel free to fork and modify — but it is not packaged for immediate reuse.
 
 ## License
 
