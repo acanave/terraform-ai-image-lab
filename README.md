@@ -1,6 +1,9 @@
 
 # AI Video Lab – Personal Infrastructure Showcase
 
+![Hello World](./assets/hello-world.png)
+
+
 > ✅ This project was designed and built as a personal technical showcase of AWS cloud infrastructure, Terraform automation, and GPU-backed EC2 provisioning for AI use cases.
 
 ---
@@ -45,6 +48,9 @@ run_sd_webui.sh   # Optional script for Stable Diffusion WebUI launch
 ---
 
 ## 🛠 Deployment Overview
+
+![Infrastructure Architecture](./assets/architecture-diagram.png)
+
 
 1. **SSO Authentication** (used for Terraform CLI access):
    ```bash
