@@ -1,6 +1,7 @@
 # Terraform files
 *.tfstate
 *.tfstate.backup
+*.tfplan
 .terraform/
 
 # tfvars files (sensitive environment-specific data)
@@ -10,3 +11,5 @@ terraform.tfvars.json
 # IDE settings
 .vscode/
 
+# Keep Terraform dependency lock file (safe and recommended to commit)
+!.terraform.lock.hcl
