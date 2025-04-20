@@ -1,7 +1,14 @@
 
 # Terraform AI Image Lab – Personal Infrastructure Showcase
 
-![Hello World](./assets/hello-world.png)
+<p align="center">
+  <img src="terraform/assets/hello-world.png"
+       alt="Hello World banner"
+       title="Hello World – cyberpunk neon city"
+       width="100%" />
+</p>
+
+
 
 
 > ✅ This project was designed and built as a personal technical showcase of AWS cloud infrastructure, Terraform automation, and GPU-backed EC2 provisioning for AI use cases.
@@ -49,7 +56,10 @@ run_sd_webui.sh   # Optional script for Stable Diffusion WebUI launch
 
 ## 🛠 Deployment Overview
 
-![Infrastructure Architecture](./assets/architecture-diagram.png)
+<p align="center">
+  <img src="terraform/assets/architecture-diagram.png" alt="Architecture Diagram" title="Architecture Diagram" width="65%" />
+</p>
+
 
 
 1. **SSO Authentication** (used for Terraform CLI access):
