@@ -1,5 +1,5 @@
 
-# AI Video Lab – Personal Infrastructure Showcase
+# Terraform AI Image Lab – Personal Infrastructure Showcase
 
 ![Hello World](./assets/hello-world.png)
 
