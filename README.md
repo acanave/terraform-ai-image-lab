@@ -86,6 +86,16 @@ run_sd_webui.sh   # Optional script for Stable Diffusion WebUI launch
    aws s3 cp output.png s3://your-bucket-name/
    ```
 
+   ## ⚠️ Stable Diffusion Setup Disclaimer
+
+The instructions provided here are a simplified setup based on my environment and goals.
+
+For the most accurate and up-to-date installation steps, please refer to the official repository:
+
+🔗 [AUTOMATIC1111/stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
+
+> Note: GPU driver support, Python versions, and dependency issues may vary depending on your EC2 instance or OS version.
+
 ---
 
 ## 🔐 Security Best Practices Followed
